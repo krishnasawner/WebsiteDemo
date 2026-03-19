@@ -1,0 +1,1568 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>BestCool – AC Sales & Service</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet"/>
+<style>
+  :root {
+    --navy: #020d1f;
+    --deep: #041530;
+    --blue: #1565e8;
+    --cyan: #00c6ff;
+    --ice: #a8e6ff;
+    --white: #f0f8ff;
+    --gray: #7ea8c4;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--navy);
+    color: var(--white);
+    font-family: 'Barlow', sans-serif;
+    overflow-x: hidden;
+  }
+
+  /* ── STARFIELD ── */
+  .stars {
+    position: fixed; inset: 0; z-index: 0; pointer-events: none;
+    background:
+      radial-gradient(ellipse at 20% 30%, rgba(21,101,232,.18) 0%, transparent 60%),
+      radial-gradient(ellipse at 80% 70%, rgba(0,198,255,.12) 0%, transparent 55%);
+  }
+  .stars::before {
+    content: '';
+    position: absolute; inset: 0;
+    background-image:
+      radial-gradient(1px 1px at 10% 15%, rgba(168,230,255,.6) 0%, transparent 100%),
+      radial-gradient(1px 1px at 25% 45%, rgba(168,230,255,.4) 0%, transparent 100%),
+      radial-gradient(1.5px 1.5px at 40% 10%, rgba(255,255,255,.5) 0%, transparent 100%),
+      radial-gradient(1px 1px at 60% 80%, rgba(168,230,255,.5) 0%, transparent 100%),
+      radial-gradient(1px 1px at 75% 25%, rgba(255,255,255,.4) 0%, transparent 100%),
+      radial-gradient(2px 2px at 88% 55%, rgba(0,198,255,.6) 0%, transparent 100%),
+      radial-gradient(1px 1px at 5% 70%, rgba(168,230,255,.3) 0%, transparent 100%),
+      radial-gradient(1px 1px at 92% 10%, rgba(255,255,255,.3) 0%, transparent 100%),
+      radial-gradient(1.5px 1.5px at 50% 50%, rgba(0,198,255,.4) 0%, transparent 100%),
+      radial-gradient(1px 1px at 33% 90%, rgba(168,230,255,.35) 0%, transparent 100%);
+  }
+
+  /* ── NAVBAR ── */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 0 5%;
+    height: 70px;
+    background: rgba(2,13,31,.85);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid rgba(0,198,255,.15);
+  }
+  .nav-logo {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.8rem;
+    letter-spacing: 3px;
+    background: linear-gradient(90deg, #fff 30%, var(--cyan));
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+  }
+  .nav-logo span { color: var(--cyan); -webkit-text-fill-color: var(--cyan); }
+  .nav-links { display: flex; gap: 2rem; list-style: none; }
+  .nav-links a {
+    color: var(--gray); text-decoration: none; font-weight: 600;
+    font-size: .9rem; letter-spacing: 1px; text-transform: uppercase;
+    transition: color .3s;
+  }
+  .nav-links a:hover { color: var(--cyan); }
+  .nav-cta {
+    background: linear-gradient(135deg, #25d366, #128c4a);
+    color: #fff; padding: .55rem 1.4rem; border-radius: 4px;
+    text-decoration: none; font-weight: 700; font-size: .85rem;
+    letter-spacing: 1px; text-transform: uppercase;
+    box-shadow: 0 0 18px rgba(37,211,102,.35);
+    transition: box-shadow .3s, transform .2s;
+    display: inline-flex; align-items: center;
+  }
+  .nav-cta:hover { box-shadow: 0 0 30px rgba(37,211,102,.6); transform: translateY(-1px); }
+
+  /* hamburger (mobile) */
+  .hamburger { display: none; flex-direction: column; gap: 5px; cursor: pointer; }
+  .hamburger span { display: block; width: 24px; height: 2px; background: var(--cyan); border-radius: 2px; }
+
+  /* ── HERO ── */
+  #hero {
+    position: relative; z-index: 1;
+    min-height: 100vh;
+    display: flex; align-items: center; justify-content: center;
+    padding: 100px 5% 60px;
+    text-align: center;
+    overflow: hidden;
+  }
+  /* ── Hero background image ── */
+  .hero-bg-img {
+    position: absolute; inset: 0;
+    background-image: url('hero-bg.png'); /* ← swap filename to change image */
+    background-size: cover;
+    background-position: center center;
+    background-repeat: no-repeat;
+    opacity: 0.5; /* ← adjust 0.0–1.0 to change transparency */
+    z-index: 0;
+    pointer-events: none;
+  }
+  /* Dark vignette over bg so text stays readable */
+  .hero-vignette {
+    position: absolute; inset: 0; z-index: 1; pointer-events: none;
+    background:
+      radial-gradient(ellipse 80% 60% at 50% 50%, rgba(2,13,31,.45) 0%, rgba(2,13,31,.75) 100%);
+  }
+  .hero-glow {
+    position: absolute; inset: 0; z-index: 2;
+    background: radial-gradient(ellipse 70% 60% at 50% 50%, rgba(21,101,232,.22) 0%, transparent 70%);
+    pointer-events: none;
+  }
+  .hero-content { position: relative; max-width: 860px; }
+  .hero-badge {
+    display: inline-block; margin-bottom: 1.4rem;
+    background: rgba(0,198,255,.1); border: 1px solid rgba(0,198,255,.35);
+    color: var(--cyan); padding: .35rem 1.1rem; border-radius: 50px;
+    font-size: .8rem; font-weight: 700; letter-spacing: 2px; text-transform: uppercase;
+  }
+  .hero-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(3.5rem, 10vw, 7rem);
+    line-height: 1;
+    letter-spacing: 4px;
+  }
+  .hero-title .white { color: var(--white); }
+  .hero-title .blue  { background: linear-gradient(90deg, var(--blue), var(--cyan)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+  .hero-sub {
+    margin: 1.2rem auto 2.4rem;
+    max-width: 560px;
+    color: var(--gray);
+    font-size: 1.1rem;
+    line-height: 1.65;
+  }
+  .hero-btns { display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap; }
+  .btn-primary {
+    background: linear-gradient(135deg, var(--blue), var(--cyan));
+    color: #fff; padding: .85rem 2.2rem; border-radius: 6px;
+    text-decoration: none; font-weight: 700; font-size: 1rem;
+    box-shadow: 0 0 30px rgba(0,198,255,.4);
+    transition: transform .2s, box-shadow .3s;
+    display: inline-flex; align-items: center; gap: .5rem;
+  }
+  .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 0 50px rgba(0,198,255,.6); }
+  .btn-outline {
+    border: 1.5px solid rgba(0,198,255,.45); color: var(--ice);
+    padding: .85rem 2.2rem; border-radius: 6px; text-decoration: none;
+    font-weight: 700; font-size: 1rem;
+    transition: background .3s, border-color .3s;
+  }
+  .btn-outline:hover { background: rgba(0,198,255,.1); border-color: var(--cyan); }
+
+  .scroll-line {
+    position: absolute; bottom: 30px; left: 50%; transform: translateX(-50%);
+    display: flex; flex-direction: column; align-items: center; gap: 6px;
+    color: var(--gray); font-size: .75rem; letter-spacing: 2px; text-transform: uppercase;
+  }
+  .scroll-line::after {
+    content: '';
+    display: block; width: 1px; height: 50px;
+    background: linear-gradient(to bottom, var(--cyan), transparent);
+    animation: scrollPulse 1.8s ease-in-out infinite;
+  }
+  @keyframes scrollPulse { 0%,100%{opacity:.3} 50%{opacity:1} }
+
+  /* ── STATS ── */
+  #stats {
+    position: relative; z-index: 1;
+    display: grid; grid-template-columns: repeat(4, 1fr);
+    gap: 1px;
+    background: rgba(0,198,255,.1);
+    border-top: 1px solid rgba(0,198,255,.15);
+    border-bottom: 1px solid rgba(0,198,255,.15);
+  }
+  .stat-box {
+    background: rgba(2,13,31,.95);
+    text-align: center; padding: 2rem 1rem;
+  }
+  .stat-num {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 3rem;
+    background: linear-gradient(90deg, var(--blue), var(--cyan));
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+  }
+  .stat-label { color: var(--gray); font-size: .85rem; letter-spacing: 1px; text-transform: uppercase; margin-top: .2rem; }
+
+  /* ── SECTION COMMON ── */
+  section { position: relative; z-index: 1; padding: 90px 5%; }
+  .section-tag {
+    color: var(--cyan); font-size: .8rem; font-weight: 700;
+    letter-spacing: 3px; text-transform: uppercase; margin-bottom: .8rem;
+  }
+  .section-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(2.2rem, 5vw, 3.8rem);
+    line-height: 1.05; letter-spacing: 2px;
+    margin-bottom: 1rem;
+  }
+  .section-desc { color: var(--gray); max-width: 560px; line-height: 1.7; margin-bottom: 3rem; }
+
+  /* ── PROMO BANNER ── */
+  #promo-banner {
+    position: relative; z-index: 1;
+    width: 100%;
+    min-height: 360px;
+    overflow: hidden;
+    display: flex; align-items: center; justify-content: center;
+  }
+  /* 👇 CHANGE THIS URL to swap your banner image */
+  .banner-bg {
+    position: absolute; inset: 0;
+    background-image: url(''); /* ← Replace with your image filename */
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    opacity: 0.45;
+    transition: opacity .4s;
+  }
+  /* AC SVG illustration positioned right side */
+  .banner-ac-svg {
+    position: absolute;
+    right: 4%;
+    top: 50%;
+    transform: translateY(-50%);
+    width: clamp(220px, 35%, 420px);
+    opacity: 0.88;
+    filter: drop-shadow(0 0 32px rgba(0,198,255,.55)) drop-shadow(0 8px 24px rgba(0,0,0,.6));
+    z-index: 3;
+    animation: acFloat 4s ease-in-out infinite;
+  }
+  @keyframes acFloat {
+    0%,100% { transform: translateY(-50%) translateY(0px); }
+    50%      { transform: translateY(-50%) translateY(-12px); }
+  }
+  /* Dark gradient overlay so text stays readable */
+  .banner-overlay {
+    position: absolute; inset: 0;
+    background: linear-gradient(
+      135deg,
+      rgba(2,13,31,.75) 0%,
+      rgba(4,21,48,.55) 50%,
+      rgba(21,101,232,.3) 100%
+    );
+  }
+  /* Glowing top & bottom border lines */
+  #promo-banner::before,
+  #promo-banner::after {
+    content: ''; position: absolute; left: 0; right: 0; height: 2px; z-index: 2;
+    background: linear-gradient(90deg, transparent, var(--cyan), transparent);
+  }
+  #promo-banner::before { top: 0; }
+  #promo-banner::after  { bottom: 0; }
+
+  .banner-content {
+    position: relative; z-index: 3;
+    text-align: center; padding: 3.5rem 5%;
+    max-width: 900px;
+  }
+  .banner-tag {
+    display: inline-block; margin-bottom: 1rem;
+    background: rgba(0,198,255,.15); border: 1px solid rgba(0,198,255,.4);
+    color: var(--cyan); padding: .3rem 1rem; border-radius: 50px;
+    font-size: .75rem; font-weight: 700; letter-spacing: 2.5px; text-transform: uppercase;
+  }
+  .banner-headline {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(2rem, 6vw, 4rem);
+    letter-spacing: 3px; line-height: 1.05;
+    margin-bottom: .8rem;
+  }
+  .banner-headline em {
+    font-style: normal;
+    background: linear-gradient(90deg, var(--blue), var(--cyan));
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+  }
+  .banner-sub {
+    color: var(--ice); font-size: 1rem; line-height: 1.6;
+    max-width: 560px; margin: 0 auto 1.8rem;
+  }
+  .banner-actions { display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap; }
+
+  /* Image swap note (visible only when no image is set — placeholder state) */
+  .banner-placeholder {
+    position: absolute; inset: 0; z-index: 1;
+    display: flex; align-items: center; justify-content: center;
+    background: repeating-linear-gradient(
+      45deg,
+      rgba(0,198,255,.03) 0px, rgba(0,198,255,.03) 1px,
+      transparent 1px, transparent 12px
+    );
+    pointer-events: none;
+  }
+
+  /* ── SERVICES ── */
+  #services { background: var(--deep); }
+  .services-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 1.5rem;
+  }
+  .service-card {
+    background: rgba(4,21,48,.7);
+    border: 1px solid rgba(0,198,255,.12);
+    border-radius: 12px;
+    padding: 2rem 1.8rem;
+    transition: transform .3s, border-color .3s, box-shadow .3s;
+    position: relative;
+    overflow: hidden;
+  }
+  .service-card::before {
+    content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px;
+    background: linear-gradient(90deg, var(--blue), var(--cyan));
+    opacity: 0; transition: opacity .3s;
+  }
+  .service-card:hover { transform: translateY(-6px); border-color: rgba(0,198,255,.4); box-shadow: 0 12px 40px rgba(0,198,255,.12); }
+  .service-card:hover::before { opacity: 1; }
+  .service-icon { font-size: 2.4rem; margin-bottom: 1rem; }
+  .service-name { font-family: 'Bebas Neue', sans-serif; font-size: 1.5rem; letter-spacing: 2px; color: var(--white); margin-bottom: .6rem; }
+  .service-desc { color: var(--gray); font-size: .92rem; line-height: 1.6; }
+
+  /* ── PRODUCTS ── */
+  #products {}
+  .products-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 2rem;
+  }
+  .product-card {
+    background: linear-gradient(145deg, rgba(4,21,48,.9), rgba(2,13,31,.95));
+    border: 1px solid rgba(0,198,255,.15);
+    border-radius: 14px;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    transition: transform .3s, box-shadow .3s;
+  }
+  .product-card:hover { transform: translateY(-8px); box-shadow: 0 20px 60px rgba(0,198,255,.15); }
+  .product-visual {
+    height: 220px;
+    width: 100%;
+    position: relative;
+    overflow: hidden;
+    background: #020d1f;
+    border-bottom: 1px solid rgba(0,198,255,.1);
+    flex-shrink: 0;
+  }
+  .product-visual img {
+    position: absolute;
+    top: 0; left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    object-position: center center;
+    display: block;
+    transition: transform .4s ease;
+    padding: 6px;
+  }
+  .product-card:hover .product-visual img { transform: scale(1.04); }
+  /* Placeholder shown when image is missing */
+  .product-visual .pv-placeholder {
+    position: absolute; inset: 0;
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center; gap: .4rem;
+    background: radial-gradient(circle at center, rgba(21,101,232,.2) 0%, transparent 70%);
+  }
+  .product-visual img.loaded ~ .pv-placeholder { display: none; }
+  .product-visual .pv-placeholder .pv-icon { font-size: 3.5rem; opacity: .5; }
+  .product-visual .pv-placeholder .pv-filename {
+    color: rgba(0,198,255,.5); font-size: .7rem; font-family: monospace;
+    background: rgba(0,198,255,.07); padding: .2rem .7rem;
+    border-radius: 4px; border: 1px dashed rgba(0,198,255,.2);
+  }
+  .product-info { padding: 1.6rem; }
+  .product-brand { color: var(--cyan); font-size: .75rem; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; margin-bottom: .3rem; }
+  .product-name { font-family: 'Bebas Neue', sans-serif; font-size: 1.5rem; letter-spacing: 1px; margin-bottom: .5rem; }
+  .product-features { list-style: none; margin-bottom: 1.2rem; }
+  .product-features li { color: var(--gray); font-size: .88rem; padding: .25rem 0; display: flex; gap: .6rem; align-items: flex-start; }
+  .product-features li::before { content: '✦'; color: var(--cyan); font-size: .6rem; margin-top: .2rem; flex-shrink: 0; }
+  .product-cta {
+    display: block; text-align: center;
+    background: rgba(21,101,232,.2); border: 1px solid rgba(0,198,255,.3);
+    color: var(--ice); padding: .65rem; border-radius: 6px;
+    text-decoration: none; font-weight: 700; font-size: .88rem; letter-spacing: 1px;
+    text-transform: uppercase; transition: background .3s, border-color .3s;
+  }
+  .product-cta:hover { background: rgba(0,198,255,.2); border-color: var(--cyan); }
+
+  /* ── WHY US ── */
+  #why { background: var(--deep); }
+  .why-grid {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; align-items: center;
+  }
+  .why-list { list-style: none; display: flex; flex-direction: column; gap: 1.4rem; }
+  .why-item { display: flex; gap: 1.2rem; align-items: flex-start; }
+  .why-icon {
+    width: 48px; height: 48px; border-radius: 10px; flex-shrink: 0;
+    background: linear-gradient(135deg, rgba(21,101,232,.3), rgba(0,198,255,.2));
+    border: 1px solid rgba(0,198,255,.3);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1.4rem;
+  }
+  .why-text h4 { font-family: 'Bebas Neue', sans-serif; font-size: 1.2rem; letter-spacing: 1.5px; margin-bottom: .3rem; }
+  .why-text p { color: var(--gray); font-size: .9rem; line-height: 1.6; }
+  .why-visual {
+    background: radial-gradient(circle at center, rgba(21,101,232,.3) 0%, transparent 65%);
+    border: 1px solid rgba(0,198,255,.15);
+    border-radius: 20px;
+    height: 420px;
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    gap: 1rem; text-align: center; padding: 2rem;
+  }
+  .why-big { font-family: 'Bebas Neue', sans-serif; font-size: 7rem; line-height: 1;
+    background: linear-gradient(135deg, var(--blue), var(--cyan));
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+  .why-big-label { color: var(--gray); letter-spacing: 3px; font-size: .8rem; text-transform: uppercase; }
+
+  /* ── TESTIMONIALS ── */
+  #testimonials {}
+  .testi-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.5rem; }
+  .testi-card {
+    background: rgba(4,21,48,.8);
+    border: 1px solid rgba(0,198,255,.12); border-radius: 12px; padding: 1.8rem;
+  }
+  .stars-row { color: var(--cyan); font-size: 1rem; margin-bottom: .8rem; letter-spacing: 2px; }
+  .testi-text { color: var(--ice); font-size: .95rem; line-height: 1.65; margin-bottom: 1.2rem; font-style: italic; }
+  .testi-author { color: var(--gray); font-size: .82rem; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; }
+
+  /* ── GALLERY ── */
+  #gallery { background: var(--navy); }
+  .gallery-grid {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    grid-template-rows: repeat(2, 220px);
+    gap: 12px;
+  }
+  .gallery-item:nth-child(1) { grid-column: span 2; grid-row: span 2; }
+  .gallery-item:nth-child(6) { grid-column: span 2; }
+  .gallery-item {
+    position: relative; border-radius: 10px; overflow: hidden;
+    background: rgba(4,21,48,0.8);
+    border: 1px solid rgba(0,198,255,0.12);
+    cursor: pointer;
+    transition: transform .3s, box-shadow .3s, border-color .3s;
+  }
+  .gallery-item:hover {
+    transform: scale(1.03);
+    box-shadow: 0 12px 40px rgba(0,198,255,0.2);
+    border-color: rgba(0,198,255,0.45);
+    z-index: 2;
+  }
+  .gallery-item img {
+    width: 100%; height: 100%;
+    object-fit: cover; display: block;
+    transition: transform .4s;
+  }
+  .gallery-item:hover img { transform: scale(1.08); }
+  .gallery-placeholder {
+    position: absolute; inset: 0;
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+    gap: .5rem;
+    background: linear-gradient(135deg, rgba(4,21,48,0.97), rgba(2,13,31,0.92));
+  }
+  .gallery-placeholder::before {
+    content: ''; position: absolute; inset: 8px;
+    border: 1.5px dashed rgba(0,198,255,0.2); border-radius: 6px; pointer-events: none;
+  }
+  .gallery-placeholder .ph-num {
+    font-family: 'Bebas Neue', sans-serif; font-size: 3rem; line-height: 1;
+    background: linear-gradient(135deg, var(--blue), var(--cyan));
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent; opacity: 0.55;
+  }
+  .gallery-item:nth-child(1) .gallery-placeholder .ph-num { font-size: 5rem; }
+  .gallery-placeholder .ph-icon { font-size: 1.6rem; opacity: 0.35; }
+  .gallery-placeholder .ph-label {
+    color: var(--gray); font-size: .7rem; letter-spacing: 1.5px;
+    text-transform: uppercase; text-align: center; padding: 0 1rem; line-height: 1.5;
+  }
+  .gallery-placeholder .ph-filename {
+    color: rgba(0,198,255,0.5); font-size: .68rem; font-family: monospace;
+    background: rgba(0,198,255,0.06); padding: .2rem .6rem; border-radius: 4px;
+    border: 1px solid rgba(0,198,255,0.15); margin-top: .2rem;
+  }
+  /* Hide placeholder once real image loads */
+  .gallery-item img.loaded ~ .gallery-placeholder { display: none; }
+
+  .gallery-hover-overlay {
+    position: absolute; inset: 0;
+    background: linear-gradient(to top, rgba(2,13,31,0.85) 0%, transparent 55%);
+    opacity: 0; transition: opacity .3s;
+    display: flex; align-items: flex-end; padding: 1rem;
+  }
+  .gallery-item:hover .gallery-hover-overlay { opacity: 1; }
+  .gallery-hover-overlay span {
+    color: var(--ice); font-size: .78rem; font-weight: 700;
+    letter-spacing: 1.5px; text-transform: uppercase;
+  }
+  /* Lightbox */
+  .lightbox {
+    position: fixed; inset: 0; z-index: 999;
+    background: rgba(1,8,20,0.96);
+    display: flex; align-items: center; justify-content: center;
+    opacity: 0; pointer-events: none; transition: opacity .3s;
+  }
+  .lightbox.open { opacity: 1; pointer-events: all; }
+  .lightbox-img {
+    max-width: 88vw; max-height: 82vh; border-radius: 10px;
+    box-shadow: 0 0 60px rgba(0,198,255,0.3);
+    border: 1px solid rgba(0,198,255,0.2); object-fit: contain;
+  }
+  .lightbox-close {
+    position: absolute; top: 22px; right: 28px;
+    font-size: 2.2rem; color: var(--gray); cursor: pointer;
+    background: none; border: none; line-height: 1; transition: color .2s;
+  }
+  .lightbox-close:hover { color: var(--cyan); }
+  .lightbox-nav {
+    position: absolute; top: 50%; transform: translateY(-50%);
+    background: rgba(0,198,255,0.1); border: 1px solid rgba(0,198,255,0.3);
+    color: var(--ice); font-size: 1.4rem; width: 46px; height: 46px;
+    border-radius: 50%; cursor: pointer; display: flex; align-items: center; justify-content: center;
+    transition: background .2s; user-select: none;
+  }
+  .lightbox-nav:hover { background: rgba(0,198,255,0.25); }
+  .lightbox-nav.prev { left: 18px; }
+  .lightbox-nav.next { right: 18px; }
+  .lightbox-caption {
+    position: absolute; bottom: 22px; left: 50%; transform: translateX(-50%);
+    color: var(--gray); font-size: .82rem; letter-spacing: 1px; white-space: nowrap;
+    background: rgba(2,13,31,0.75); padding: .4rem 1.2rem; border-radius: 20px;
+  }
+  @media(max-width:900px) {
+    .gallery-grid { grid-template-columns: repeat(3,1fr); grid-template-rows: auto; }
+    .gallery-item { height: 180px; }
+    .gallery-item:nth-child(1) { grid-column: span 2; grid-row: span 1; }
+    .gallery-item:nth-child(6) { grid-column: span 1; }
+  }
+  @media(max-width:550px) {
+    .gallery-grid { grid-template-columns: repeat(2,1fr); }
+    .gallery-item { height: 150px; }
+    .gallery-item:nth-child(1) { grid-column: span 2; }
+  }
+
+  /* ── CONTACT ── */
+  #contact { background: var(--deep); }
+  .contact-wrap {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; align-items: start;
+  }
+  .contact-info { display: flex; flex-direction: column; gap: 1.5rem; }
+  .info-item { display: flex; gap: 1rem; align-items: flex-start; }
+  .info-icon {
+    width: 44px; height: 44px; border-radius: 8px; flex-shrink: 0;
+    background: rgba(0,198,255,.1); border: 1px solid rgba(0,198,255,.25);
+    display: flex; align-items: center; justify-content: center; font-size: 1.2rem;
+  }
+  .info-text h4 { font-weight: 700; font-size: .95rem; margin-bottom: .2rem; }
+  .info-text p { color: var(--gray); font-size: .88rem; line-height: 1.5; }
+  .contact-form { display: flex; flex-direction: column; gap: 1rem; }
+  .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+  .form-group { display: flex; flex-direction: column; gap: .4rem; }
+  .form-group label { color: var(--gray); font-size: .8rem; letter-spacing: 1px; text-transform: uppercase; font-weight: 600; }
+  .form-group input,
+  .form-group select,
+  .form-group textarea {
+    background: rgba(4,21,48,.8); border: 1px solid rgba(0,198,255,.2);
+    color: var(--white); padding: .75rem 1rem; border-radius: 6px;
+    font-family: 'Barlow', sans-serif; font-size: .95rem;
+    outline: none; transition: border-color .3s;
+  }
+  .form-group input:focus,
+  .form-group select:focus,
+  .form-group textarea:focus { border-color: var(--cyan); box-shadow: 0 0 0 3px rgba(0,198,255,.1); }
+  .form-group textarea { resize: vertical; min-height: 100px; }
+  .form-group select option { background: var(--deep); }
+  .btn-submit {
+    background: linear-gradient(135deg, #25d366, #128c4a);
+    color: #fff; padding: .9rem 2rem; border-radius: 6px;
+    border: none; cursor: pointer; font-weight: 700; font-size: 1rem;
+    letter-spacing: 1px; text-transform: uppercase;
+    box-shadow: 0 0 25px rgba(37,211,102,.35);
+    transition: transform .2s, box-shadow .3s;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .btn-submit:hover { transform: translateY(-2px); box-shadow: 0 0 40px rgba(37,211,102,.55); }
+
+  /* ── FOOTER ── */
+  footer {
+    position: relative; z-index: 1;
+    background: #010a17;
+    border-top: 1px solid rgba(0,198,255,.12);
+    padding: 50px 5% 30px;
+  }
+  .footer-top {
+    display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 3rem;
+    padding-bottom: 3rem; border-bottom: 1px solid rgba(0,198,255,.1);
+    margin-bottom: 2rem;
+  }
+  .footer-brand-name {
+    font-family: 'Bebas Neue', sans-serif; font-size: 2rem; letter-spacing: 3px;
+    background: linear-gradient(90deg, #fff, var(--cyan));
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    margin-bottom: .8rem;
+  }
+  .footer-brand-desc { color: var(--gray); font-size: .88rem; line-height: 1.6; max-width: 260px; }
+  .footer-col h5 { color: var(--ice); font-size: .8rem; letter-spacing: 2px; text-transform: uppercase; margin-bottom: 1rem; font-weight: 700; }
+  .footer-col ul { list-style: none; display: flex; flex-direction: column; gap: .6rem; }
+  .footer-col ul li a { color: var(--gray); text-decoration: none; font-size: .88rem; transition: color .2s; }
+  .footer-col ul li a:hover { color: var(--cyan); }
+  .footer-bottom { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem; }
+  .footer-copy { color: var(--gray); font-size: .82rem; }
+  .footer-copy span { color: var(--cyan); }
+  .social-links { display: flex; gap: .8rem; }
+  .social-links a {
+    width: 36px; height: 36px; border-radius: 8px;
+    background: rgba(0,198,255,.08); border: 1px solid rgba(0,198,255,.2);
+    display: flex; align-items: center; justify-content: center;
+    color: var(--gray); text-decoration: none; font-size: 1rem;
+    transition: background .3s, color .3s;
+  }
+  .social-links a:hover { background: rgba(0,198,255,.2); color: var(--cyan); }
+
+  /* ── FLOATING CTA ── */
+  .float-call {
+    position: fixed; bottom: 28px; right: 28px; z-index: 200;
+    background: linear-gradient(135deg, #25d366, #128c4a);
+    color: #fff; padding: .85rem 1.5rem; border-radius: 50px;
+    text-decoration: none; font-weight: 700; font-size: .9rem;
+    box-shadow: 0 6px 30px rgba(37,211,102,.45);
+    display: flex; align-items: center; gap: .6rem;
+    animation: floatBob 3s ease-in-out infinite;
+    transition: transform .2s, box-shadow .3s;
+  }
+  .float-call:hover { transform: scale(1.05); box-shadow: 0 8px 40px rgba(37,211,102,.65); }
+  @keyframes floatBob { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-6px)} }
+
+  /* ── ANIMATIONS ── */
+  .fade-up {
+    opacity: 0; transform: translateY(30px);
+    animation: fadeUp .7s ease forwards;
+  }
+  .fade-up:nth-child(1){animation-delay:.1s}
+  .fade-up:nth-child(2){animation-delay:.2s}
+  .fade-up:nth-child(3){animation-delay:.3s}
+  .fade-up:nth-child(4){animation-delay:.4s}
+  .fade-up:nth-child(5){animation-delay:.5s}
+  .fade-up:nth-child(6){animation-delay:.6s}
+  @keyframes fadeUp { to { opacity:1; transform:translateY(0); } }
+
+  /* ── RESPONSIVE ── */
+  @media(max-width:900px) {
+    .nav-links, .nav-cta { display: none; }
+    .hamburger { display: flex; }
+    #stats { grid-template-columns: repeat(2,1fr); }
+    .why-grid, .contact-wrap { grid-template-columns: 1fr; }
+    .footer-top { grid-template-columns: 1fr 1fr; }
+  }
+  @media(max-width:550px) {
+    #stats { grid-template-columns: 1fr 1fr; }
+    .form-row { grid-template-columns: 1fr; }
+    .footer-top { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+  <script>
+// ── SNOWFLAKE CURSOR EFFECT ──
+(function() {
+  var maxFlakes = 30;
+  var activeFlakes = 0;
+
+  function spawnFlake(x, y) {
+    if (activeFlakes >= maxFlakes) return;
+    activeFlakes++;
+
+    var el = document.createElement('div');
+    el.textContent = '❄️';
+
+    var size     = 14 + Math.random() * 18;
+    var angle    = -60 + Math.random() * 120;
+    var dist     = 60  + Math.random() * 100;
+    var duration = 800 + Math.random() * 700;
+    var spin     = (Math.random() > .5 ? 1 : -1) * (180 + Math.random() * 360);
+
+    el.style.position      = 'fixed';
+    el.style.left          = (x - size / 2) + 'px';
+    el.style.top           = (y - size / 2) + 'px';
+    el.style.fontSize      = size + 'px';
+    el.style.lineHeight    = '1';
+    el.style.pointerEvents = 'none';
+    el.style.zIndex        = '99999';
+    el.style.userSelect    = 'none';
+    el.style.willChange    = 'transform, opacity';
+    el.style.transition    = 'transform ' + duration + 'ms cubic-bezier(.2,.8,.4,1), opacity ' + duration + 'ms ease';
+    el.style.opacity       = '1';
+
+    document.body.appendChild(el);
+
+    requestAnimationFrame(function(){ requestAnimationFrame(function(){
+      var rad = (angle * Math.PI) / 180;
+      var dx  = Math.sin(rad) * dist;
+      var dy  = -Math.abs(Math.cos(rad) * dist);
+      el.style.transform = 'translate(' + dx + 'px, ' + dy + 'px) rotate(' + spin + 'deg) scale(0.2)';
+      el.style.opacity   = '0';
+    }); });
+
+    setTimeout(function() {
+      el.remove();
+      activeFlakes--;
+    }, duration + 50);
+  }
+
+  // Mouse move — trail
+  var lastMove = 0;
+  document.addEventListener('mousemove', function(e) {
+    var now = Date.now();
+    if (now - lastMove < 60) return;
+    lastMove = now;
+    spawnFlake(e.clientX, e.clientY);
+  });
+
+  // Click — burst of 8
+  document.addEventListener('click', function(e) {
+    for (var i = 0; i < 8; i++) {
+      (function(i){ setTimeout(function(){ spawnFlake(e.clientX, e.clientY); }, i * 40); })(i);
+    }
+  });
+
+  // Touch move — trail on mobile
+  var lastTouch = 0;
+  document.addEventListener('touchmove', function(e) {
+    var now = Date.now();
+    if (now - lastTouch < 60) return;
+    lastTouch = now;
+    var t = e.touches[0];
+    spawnFlake(t.clientX, t.clientY);
+  }, { passive: true });
+
+  // Touch tap — burst of 8
+  document.addEventListener('touchstart', function(e) {
+    var t = e.touches[0];
+    for (var i = 0; i < 8; i++) {
+      (function(i){ setTimeout(function(){ spawnFlake(t.clientX, t.clientY); }, i * 40); })(i);
+    }
+  }, { passive: true });
+
+})();
+</script>
+
+<div class="stars"></div>
+
+<!-- NAVBAR -->
+<nav>
+  <div class="nav-logo">Best<span>Cool</span></div>
+  <ul class="nav-links">
+    <li><a href="#services">Services</a></li>
+    <li><a href="#products">Products</a></li>
+    <li><a href="#why">Why Us</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+  <a href="https://wa.me/919826330228?text=Hi%20BestCool!%20I%20need%20help%20with%20my%20AC." target="_blank" rel="noopener noreferrer" class="nav-cta">
+    <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="currentColor" style="vertical-align:middle;margin-right:4px"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+    WhatsApp Us
+  </a>
+  <div class="hamburger" onclick="toggleMenu(this)">
+    <span></span><span></span><span></span>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section id="hero">
+  <div class="hero-bg-img"></div>
+  <div class="hero-vignette"></div>
+  <div class="hero-glow"></div>
+  <div class="hero-content" style="position:relative; z-index:3;">
+    <div class="hero-badge fade-up">❄️ Indore's Trusted AC Experts</div>
+    <h1 class="hero-title fade-up">
+      <span class="white">BEST</span><span class="blue">COOL</span>
+    </h1>
+    <p class="hero-sub fade-up">
+      Premium AC Sales, Expert Installation & Fast Repair Services.
+      Stay cool all year round — we've got you covered.
+    </p>
+    <div class="hero-btns fade-up">
+      <a href="#contact" class="btn-primary">❄️ Book a Service</a>
+      <a href="#products" class="btn-outline">View ACs</a>
+    </div>
+  </div>
+  <div class="scroll-line">Scroll</div>
+</section>
+
+<!-- STATS -->
+<div id="stats">
+  <div class="stat-box">
+    <div class="stat-num">500+</div>
+    <div class="stat-label">Happy Customers</div>
+  </div>
+  <div class="stat-box">
+    <div class="stat-num">10+</div>
+    <div class="stat-label">Years of Experience</div>
+  </div>
+  <div class="stat-box">
+    <div class="stat-num">24/7</div>
+    <div class="stat-label">Emergency Support</div>
+  </div>
+  <div class="stat-box">
+    <div class="stat-num">100%</div>
+    <div class="stat-label">Satisfaction Rate</div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════
+     PROMO BANNER
+     HOW TO CHANGE IMAGE:
+       Option A — Put your image file in the same folder as index.html
+                  and change 'banner.jpg' in the CSS (.banner-bg) to your filename.
+       Option B — Use a full URL: url('https://yoursite.com/image.jpg')
+     ═══════════════════════════════════════════════ -->
+<div id="promo-banner">
+  <div class="banner-bg"></div>
+  <div class="banner-overlay"></div>
+  <div class="banner-placeholder"></div>
+
+  <!-- ✦ DUMMY AC SVG ILLUSTRATION — replace .banner-ac-svg with your own <img> tag if needed -->
+  <svg class="banner-ac-svg" viewBox="0 0 400 260" xmlns="http://www.w3.org/2000/svg">
+    <defs>
+      <linearGradient id="bodyGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+        <stop offset="0%" stop-color="#dff4ff"/>
+        <stop offset="40%" stop-color="#c5e8f7"/>
+        <stop offset="100%" stop-color="#8ec8e8"/>
+      </linearGradient>
+      <linearGradient id="frontGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+        <stop offset="0%" stop-color="#e8f6ff"/>
+        <stop offset="100%" stop-color="#b0d8f0"/>
+      </linearGradient>
+      <linearGradient id="ventGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+        <stop offset="0%" stop-color="#1565e8" stop-opacity="0.7"/>
+        <stop offset="50%" stop-color="#00c6ff" stop-opacity="0.9"/>
+        <stop offset="100%" stop-color="#1565e8" stop-opacity="0.7"/>
+      </linearGradient>
+      <linearGradient id="glowLine" x1="0%" y1="0%" x2="100%" y2="0%">
+        <stop offset="0%" stop-color="#00c6ff" stop-opacity="0"/>
+        <stop offset="30%" stop-color="#00c6ff" stop-opacity="1"/>
+        <stop offset="70%" stop-color="#00c6ff" stop-opacity="1"/>
+        <stop offset="100%" stop-color="#00c6ff" stop-opacity="0"/>
+      </linearGradient>
+      <filter id="glow">
+        <feGaussianBlur stdDeviation="3" result="blur"/>
+        <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+      </filter>
+      <filter id="softGlow">
+        <feGaussianBlur stdDeviation="6" result="blur"/>
+        <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+      </filter>
+      <!-- Air flow wave animation -->
+      <linearGradient id="airGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+        <stop offset="0%" stop-color="#00c6ff" stop-opacity="0"/>
+        <stop offset="40%" stop-color="#00c6ff" stop-opacity="0.6"/>
+        <stop offset="100%" stop-color="#00c6ff" stop-opacity="0"/>
+      </linearGradient>
+    </defs>
+
+    <!-- Ambient glow behind unit -->
+    <ellipse cx="200" cy="130" rx="190" ry="100" fill="rgba(0,198,255,0.06)"/>
+
+    <!-- === MAIN AC BODY === -->
+    <!-- Shadow -->
+    <rect x="22" y="42" width="356" height="148" rx="18" fill="rgba(0,0,0,0.35)" transform="translate(4,6)"/>
+    <!-- Main casing -->
+    <rect x="22" y="42" width="356" height="148" rx="18" fill="url(#bodyGrad)" stroke="#9fd8f0" stroke-width="1.5"/>
+    <!-- Top highlight stripe -->
+    <rect x="30" y="44" width="340" height="8" rx="4" fill="rgba(255,255,255,0.55)"/>
+    <!-- Front face panel -->
+    <rect x="30" y="72" width="340" height="100" rx="6" fill="url(#frontGrad)" stroke="rgba(180,220,240,0.5)" stroke-width="1"/>
+
+    <!-- === INTAKE GRILLE (top area) === -->
+    <rect x="30" y="52" width="340" height="18" rx="3" fill="rgba(100,180,220,0.25)"/>
+    <!-- Grille lines -->
+    <line x1="30" y1="56" x2="370" y2="56" stroke="rgba(80,160,200,0.4)" stroke-width="1"/>
+    <line x1="30" y1="60" x2="370" y2="60" stroke="rgba(80,160,200,0.4)" stroke-width="1"/>
+    <line x1="30" y1="64" x2="370" y2="64" stroke="rgba(80,160,200,0.4)" stroke-width="1"/>
+
+    <!-- === MAIN VENT (bottom) — louver blades === -->
+    <rect x="30" y="155" width="340" height="26" rx="4" fill="rgba(0,60,120,0.35)"/>
+    <!-- Louver blades -->
+    <rect x="34" y="158" width="332" height="4" rx="2" fill="rgba(150,210,240,0.7)" stroke="rgba(100,180,220,0.3)" stroke-width="0.5"/>
+    <rect x="34" y="164" width="332" height="4" rx="2" fill="rgba(150,210,240,0.6)" stroke="rgba(100,180,220,0.3)" stroke-width="0.5"/>
+    <rect x="34" y="170" width="332" height="4" rx="2" fill="rgba(150,210,240,0.5)" stroke="rgba(100,180,220,0.3)" stroke-width="0.5"/>
+
+    <!-- Vent glow effect -->
+    <rect x="30" y="155" width="340" height="26" rx="4" fill="url(#ventGrad)" opacity="0.4"/>
+
+    <!-- === DISPLAY PANEL (left side) === -->
+    <rect x="38" y="80" width="90" height="56" rx="6" fill="rgba(2,20,50,0.75)" stroke="rgba(0,198,255,0.4)" stroke-width="1"/>
+    <!-- Display screen -->
+    <rect x="42" y="84" width="56" height="28" rx="3" fill="rgba(0,40,80,0.9)" stroke="rgba(0,198,255,0.3)" stroke-width="0.8"/>
+    <!-- Temperature display -->
+    <text x="70" y="104" text-anchor="middle" font-family="monospace" font-size="16" font-weight="bold" fill="#00c6ff" filter="url(#glow)">24°</text>
+    <!-- Mode dots -->
+    <circle cx="46" cy="120" r="3" fill="#00c6ff" filter="url(#glow)"/>
+    <circle cx="56" cy="120" r="3" fill="rgba(0,198,255,0.3)"/>
+    <circle cx="66" cy="120" r="3" fill="rgba(0,198,255,0.3)"/>
+    <!-- Power indicator -->
+    <circle cx="112" cy="92" r="5" fill="rgba(0,220,100,0.15)" stroke="#00dc64" stroke-width="1.2" filter="url(#glow)"/>
+    <circle cx="112" cy="92" r="2.5" fill="#00dc64" filter="url(#glow)"/>
+    <!-- WiFi icon -->
+    <path d="M107,108 Q112,103 117,108" stroke="#00c6ff" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+    <path d="M104,112 Q112,104 120,112" stroke="#00c6ff" stroke-width="1.5" fill="none" stroke-linecap="round" opacity="0.6"/>
+    <circle cx="112" cy="114" r="1.5" fill="#00c6ff"/>
+
+    <!-- === CENTER LOGO AREA === -->
+    <text x="200" y="108" text-anchor="middle" font-family="'Bebas Neue', sans-serif" font-size="22" letter-spacing="4" fill="rgba(30,90,160,0.5)">BESTCOOL</text>
+    <text x="200" y="124" text-anchor="middle" font-family="sans-serif" font-size="9" letter-spacing="3" fill="rgba(80,140,180,0.6)">INVERTER SPLIT AC</text>
+
+    <!-- Star/snowflake icon -->
+    <g transform="translate(200,140)" opacity="0.5">
+      <line x1="0" y1="-8" x2="0" y2="8" stroke="#00c6ff" stroke-width="1.5"/>
+      <line x1="-8" y1="0" x2="8" y2="0" stroke="#00c6ff" stroke-width="1.5"/>
+      <line x1="-6" y1="-6" x2="6" y2="6" stroke="#00c6ff" stroke-width="1"/>
+      <line x1="6" y1="-6" x2="-6" y2="6" stroke="#00c6ff" stroke-width="1"/>
+    </g>
+
+    <!-- === CONTROL BUTTONS (right side) === -->
+    <rect x="290" y="80" width="72" height="56" rx="6" fill="rgba(2,20,50,0.5)" stroke="rgba(0,198,255,0.2)" stroke-width="1"/>
+    <!-- Buttons -->
+    <rect x="296" y="86" width="26" height="14" rx="4" fill="rgba(0,198,255,0.15)" stroke="rgba(0,198,255,0.5)" stroke-width="1"/>
+    <text x="309" y="96" text-anchor="middle" font-size="7" fill="#a8e6ff" font-family="sans-serif">MODE</text>
+    <rect x="330" y="86" width="26" height="14" rx="4" fill="rgba(0,198,255,0.15)" stroke="rgba(0,198,255,0.5)" stroke-width="1"/>
+    <text x="343" y="96" text-anchor="middle" font-size="7" fill="#a8e6ff" font-family="sans-serif">FAN</text>
+    <!-- Temp buttons -->
+    <circle cx="308" cy="116" r="8" fill="rgba(255,80,60,0.15)" stroke="rgba(255,120,80,0.5)" stroke-width="1"/>
+    <text x="308" y="120" text-anchor="middle" font-size="10" fill="#ff9070" font-family="sans-serif">▲</text>
+    <circle cx="344" cy="116" r="8" fill="rgba(0,180,255,0.15)" stroke="rgba(0,198,255,0.5)" stroke-width="1"/>
+    <text x="344" y="120" text-anchor="middle" font-size="10" fill="#00c6ff" font-family="sans-serif">▼</text>
+
+    <!-- === BOTTOM EDGE GLOW LINE === -->
+    <rect x="22" y="184" width="356" height="5" rx="3" fill="url(#glowLine)" opacity="0.9" filter="url(#glow)"/>
+
+    <!-- === WALL MOUNT BRACKETS === -->
+    <rect x="50" y="186" width="24" height="16" rx="3" fill="rgba(100,160,190,0.6)" stroke="rgba(120,180,210,0.4)" stroke-width="1"/>
+    <rect x="326" y="186" width="24" height="16" rx="3" fill="rgba(100,160,190,0.6)" stroke="rgba(120,180,210,0.4)" stroke-width="1"/>
+    <rect x="55" y="200" width="14" height="30" rx="2" fill="rgba(80,140,170,0.5)"/>
+    <rect x="331" y="200" width="14" height="30" rx="2" fill="rgba(80,140,170,0.5)"/>
+
+    <!-- === AIRFLOW WAVES (animated) === -->
+    <g opacity="0.7">
+      <!-- Wave 1 -->
+      <path d="M50,210 Q90,220 130,215 Q170,208 210,218 Q250,228 290,220 Q330,212 360,218"
+        stroke="#00c6ff" stroke-width="2" fill="none" stroke-linecap="round" opacity="0.5">
+        <animate attributeName="opacity" values="0.1;0.6;0.1" dur="2s" repeatCount="indefinite"/>
+        <animate attributeName="d"
+          values="M50,210 Q90,220 130,215 Q170,208 210,218 Q250,228 290,220 Q330,212 360,218;
+                  M50,215 Q90,208 130,220 Q170,225 210,215 Q250,205 290,215 Q330,222 360,215;
+                  M50,210 Q90,220 130,215 Q170,208 210,218 Q250,228 290,220 Q330,212 360,218"
+          dur="2s" repeatCount="indefinite"/>
+      </path>
+      <!-- Wave 2 -->
+      <path d="M50,225 Q100,235 150,228 Q200,220 250,232 Q300,240 360,230"
+        stroke="#1565e8" stroke-width="1.5" fill="none" stroke-linecap="round" opacity="0.4">
+        <animate attributeName="opacity" values="0.1;0.5;0.1" dur="2.5s" begin="0.4s" repeatCount="indefinite"/>
+      </path>
+      <!-- Wave 3 -->
+      <path d="M50,240 Q110,248 170,242 Q230,235 290,244 Q330,250 370,243"
+        stroke="#00c6ff" stroke-width="1" fill="none" stroke-linecap="round" opacity="0.3">
+        <animate attributeName="opacity" values="0;0.4;0" dur="3s" begin="0.8s" repeatCount="indefinite"/>
+      </path>
+    </g>
+
+    <!-- Cool particles -->
+    <circle cx="80" cy="235" r="2" fill="#00c6ff" opacity="0.7">
+      <animate attributeName="cy" values="220;260" dur="2s" repeatCount="indefinite"/>
+      <animate attributeName="opacity" values="0.7;0" dur="2s" repeatCount="indefinite"/>
+    </circle>
+    <circle cx="160" cy="230" r="1.5" fill="#a8e6ff" opacity="0.6">
+      <animate attributeName="cy" values="218;258" dur="2.3s" begin="0.5s" repeatCount="indefinite"/>
+      <animate attributeName="opacity" values="0.6;0" dur="2.3s" begin="0.5s" repeatCount="indefinite"/>
+    </circle>
+    <circle cx="240" cy="228" r="2" fill="#00c6ff" opacity="0.5">
+      <animate attributeName="cy" values="220;255" dur="1.8s" begin="1s" repeatCount="indefinite"/>
+      <animate attributeName="opacity" values="0.5;0" dur="1.8s" begin="1s" repeatCount="indefinite"/>
+    </circle>
+    <circle cx="320" cy="232" r="1.5" fill="#a8e6ff" opacity="0.6">
+      <animate attributeName="cy" values="222;260" dur="2.1s" begin="0.3s" repeatCount="indefinite"/>
+      <animate attributeName="opacity" values="0.6;0" dur="2.1s" begin="0.3s" repeatCount="indefinite"/>
+    </circle>
+  </svg>
+
+  <!-- Banner content (left-aligned when SVG is present) -->
+  <div class="banner-content" style="text-align:left; margin-right: clamp(220px,36%,440px);">
+    <div class="banner-tag">🔥 Summer Special Offer</div>
+    <h2 class="banner-headline">
+      Beat The Heat With<br>
+      <em>BestCool's Best Deals</em>
+    </h2>
+    <p class="banner-sub" style="margin:0 0 1.8rem;">
+      Free installation on all new AC purchases this season. Limited time offer — book now and stay cool all summer!
+    </p>
+    <div class="banner-actions" style="justify-content:flex-start;">
+      <a href="#contact" class="btn-primary">❄️ Claim Offer</a>
+      <a href="#products" class="btn-outline">Browse ACs</a>
+    </div>
+  </div>
+</div>
+
+<!-- SERVICES -->
+<section id="services">
+  <div class="section-tag">What We Do</div>
+  <h2 class="section-title">Our Services</h2>
+  <p class="section-desc">From installation to annual maintenance, we provide end-to-end AC care to keep your space perfectly cool.</p>
+  <div class="services-grid">
+    <div class="service-card fade-up">
+      <div class="service-icon">🔧</div>
+      <div class="service-name">AC Repair</div>
+      <p class="service-desc">Fast diagnosis and repair for all brands. Gas refilling, PCB repair, compressor replacement and more.</p>
+    </div>
+    <div class="service-card fade-up">
+      <div class="service-icon">🛠️</div>
+      <div class="service-name">Installation</div>
+      <p class="service-desc">Professional installation of split, window, and cassette ACs with neat pipe routing and testing.</p>
+    </div>
+    <div class="service-card fade-up">
+      <div class="service-icon">🧹</div>
+      <div class="service-name">AC Service & Cleaning</div>
+      <p class="service-desc">Deep cleaning of filters, coils, and drain pipes. Improve efficiency and indoor air quality.</p>
+    </div>
+    <div class="service-card fade-up">
+      <div class="service-icon">🌡️</div>
+      <div class="service-name">AMC Plans</div>
+      <p class="service-desc">Annual Maintenance Contracts for homes and offices — scheduled visits, priority support.</p>
+    </div>
+    <div class="service-card fade-up">
+      <div class="service-icon">🏢</div>
+      <div class="service-name">Commercial AC</div>
+      <p class="service-desc">Centralized AC, VRF/VRV systems for offices, shops, and commercial buildings.</p>
+    </div>
+    <div class="service-card fade-up">
+      <div class="service-icon">🔄</div>
+      <div class="service-name">AC Exchange</div>
+      <p class="service-desc">Trade your old AC for a new one with the best exchange value. All brands accepted.</p>
+    </div>
+  </div>
+</section>
+
+<!-- PRODUCTS -->
+<section id="products">
+  <div class="section-tag">Our Range</div>
+  <h2 class="section-title">ACs We Sell</h2>
+  <p class="section-desc">We stock the latest inverter split ACs from India's top brands at the best prices in Indore.</p>
+  <div class="products-grid">
+    <div class="product-card">
+      <!-- ✏️ Add your image: name it split-ac.jpg and place in same folder -->
+      <div class="product-visual">
+        <img src="split-ac.jpg" alt="Inverter Split AC"
+             onerror="this.style.display='none'"
+             onload="this.classList.add('loaded')" />
+        <div class="pv-placeholder">
+          <div class="pv-icon">❄️</div>
+          <div class="pv-filename">split-ac.jpg</div>
+        </div>
+      </div>
+      <div class="product-info">
+        <div class="product-brand">Split AC</div>
+        <div class="product-name">Inverter Split ACs</div>
+        <ul class="product-features">
+          <li>1 Ton, 1.5 Ton & 2 Ton options</li>
+          <li>5-Star energy rating</li>
+          <li>Auto-clean technology</li>
+          <li>Wi-Fi enabled models available</li>
+        </ul>
+        <a href="#contact" class="product-cta">Enquire Now</a>
+      </div>
+    </div>
+    <div class="product-card">
+      <!-- ✏️ Add your image: name it window-ac.jpg and place in same folder -->
+      <div class="product-visual">
+        <img src="window-ac.jpg" alt="Window AC"
+             onerror="this.style.display='none'"
+             onload="this.classList.add('loaded')" />
+        <div class="pv-placeholder">
+          <div class="pv-icon">🏠</div>
+          <div class="pv-filename">window-ac.jpg</div>
+        </div>
+      </div>
+      <div class="product-info">
+        <div class="product-brand">Window AC</div>
+        <div class="product-name">Window ACs</div>
+        <ul class="product-features">
+          <li>Budget-friendly option</li>
+          <li>Easy installation</li>
+          <li>1 Ton & 1.5 Ton</li>
+          <li>Low maintenance cost</li>
+        </ul>
+        <a href="#contact" class="product-cta">Enquire Now</a>
+      </div>
+    </div>
+    <div class="product-card">
+      <!-- ✏️ Add your image: name it cassette-ac.jpg and place in same folder -->
+      <div class="product-visual">
+        <img src="cassette-ac.jpg" alt="Cassette & Tower AC"
+             onerror="this.style.display='none'"
+             onload="this.classList.add('loaded')" />
+        <div class="pv-placeholder">
+          <div class="pv-icon">🌀</div>
+          <div class="pv-filename">cassette-ac.jpg</div>
+        </div>
+      </div>
+      <div class="product-info">
+        <div class="product-brand">Cassette AC</div>
+        <div class="product-name">Cassette & Tower ACs</div>
+        <ul class="product-features">
+          <li>360° air distribution</li>
+          <li>Ideal for large rooms</li>
+          <li>2 Ton & 3 Ton variants</li>
+          <li>Commercial-grade cooling</li>
+        </ul>
+        <a href="#contact" class="product-cta">Enquire Now</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- WHY US -->
+<section id="why">
+  <div class="section-tag">Why BestCool</div>
+  <h2 class="section-title">The BestCool Difference</h2>
+  <div class="why-grid">
+    <ul class="why-list">
+      <li class="why-item">
+        <div class="why-icon">⚡</div>
+        <div class="why-text">
+          <h4>Same-Day Service</h4>
+          <p>Book before noon, we're at your door the same day. No waiting, no hassle.</p>
+        </div>
+      </li>
+      <li class="why-item">
+        <div class="why-icon">🏅</div>
+        <div class="why-text">
+          <h4>Certified Technicians</h4>
+          <p>Our team is factory-trained for Daikin, Voltas, LG, Samsung, Hitachi & more.</p>
+        </div>
+      </li>
+      <li class="why-item">
+        <div class="why-icon">💰</div>
+        <div class="why-text">
+          <h4>Transparent Pricing</h4>
+          <p>No hidden charges. You get a clear quote before we start any work.</p>
+        </div>
+      </li>
+      <li class="why-item">
+        <div class="why-icon">🛡️</div>
+        <div class="why-text">
+          <h4>Service Warranty</h4>
+          <p>All repairs come with a 30-day service warranty. Your peace of mind guaranteed.</p>
+        </div>
+      </li>
+      <li class="why-item">
+        <div class="why-icon">📞</div>
+        <div class="why-text">
+          <h4>24/7 Customer Support</h4>
+          <p>Round-the-clock helpline for emergencies. We're always just one call away.</p>
+        </div>
+      </li>
+    </ul>
+    <div class="why-visual">
+      <div class="why-big">10+</div>
+      <div class="why-big-label">Years Serving Indore</div>
+      <div style="margin-top:1rem;color:var(--gray);font-size:.9rem;line-height:1.6;">Trusted by homes & businesses<br>across Indore, <br>Vijay Nagar, M.G. Road & beyond.</div>
+    </div>
+  </div>
+</section>
+
+<!-- TESTIMONIALS -->
+<section id="testimonials" style="background:var(--deep)">
+  <div class="section-tag">Customers Say</div>
+  <h2 class="section-title">Real Reviews</h2>
+  <div class="testi-grid">
+    <div class="testi-card">
+      <div class="stars-row">★★★★★</div>
+      <p class="testi-text">"BestCool serviced my Daikin AC in under 2 hours. The technician was professional and the AC works like new. Highly recommended!"</p>
+      <div class="testi-author">— Nikhelesh, Vijaynagar</div>
+    </div>
+    <div class="testi-card">
+      <div class="stars-row">★★★★★</div>
+      <p class="testi-text">"Bought a 1.5 ton inverter AC from them. Great price and the installation was clean and perfect. AMC plan is also very affordable."</p>
+      <div class="testi-author">— Deepali Gour., Omaxe City I</div>
+    </div>
+    <div class="testi-card">
+      <div class="stars-row">★★★★★</div>
+      <p class="testi-text">"Called them on a Sunday night for an emergency repair. They arrived within an hour. Truly 24/7 service. Will always call BestCool!"</p>
+      <div class="testi-author">— Krishna Sawner, Sangam nagar</div>
+    </div>
+  </div>
+</section>
+
+<!-- GALLERY -->
+<!--
+  ════════════════════════════════════════════════════
+  HOW TO ADD YOUR PHOTOS:
+  Place your images in the SAME folder as index.html
+  and name them exactly:  1.jpg  2.jpg  3.jpg ... 10.jpg
+  (or use .png / .jpeg — just update the src below)
+  The placeholder disappears automatically once the image loads.
+  ════════════════════════════════════════════════════
+-->
+<section id="gallery">
+  <div class="section-tag">Our Work</div>
+  <h2 class="section-title">Installation & Customer Gallery</h2>
+  <p class="section-desc">Real installations from real homes and offices across Indore. Add your own photos by naming them 1.jpg – 10.jpg in the same folder.</p>
+
+  <div class="gallery-grid">
+
+    <!-- IMAGE 1 — Large featured (2×2) -->
+    <div class="gallery-item" onclick="openLightbox(0)">
+      <img src="1.jpg" alt="Gallery image 1" onerror="this.style.display='none'" onload="this.classList.add('loaded')"/>
+      <div class="gallery-placeholder">
+        <div class="ph-icon">🏠</div>
+        <div class="ph-num">1</div>
+        <div class="ph-label">Customer Installation</div>
+        <div class="ph-filename">1.jpg</div>
+      </div>
+      <div class="gallery-hover-overlay"><span>🏠 Customer Installation</span></div>
+    </div>
+
+    <!-- IMAGE 2 -->
+    <div class="gallery-item" onclick="openLightbox(1)">
+      <img src="2.jpg" alt="Gallery image 2" onerror="this.style.display='none'" onload="this.classList.add('loaded')"/>
+      <div class="gallery-placeholder">
+        <div class="ph-icon">❄️</div>
+        <div class="ph-num">2</div>
+        <div class="ph-label">AC Setup</div>
+        <div class="ph-filename">2.jpg</div>
+      </div>
+      <div class="gallery-hover-overlay"><span>❄️ AC Setup</span></div>
+    </div>
+
+    <!-- IMAGE 3 -->
+    <div class="gallery-item" onclick="openLightbox(2)">
+      <img src="3.jpg" alt="Gallery image 3" onerror="this.style.display='none'" onload="this.classList.add('loaded')"/>
+      <div class="gallery-placeholder">
+        <div class="ph-icon">🔧</div>
+        <div class="ph-num">3</div>
+        <div class="ph-label">Service Visit</div>
+        <div class="ph-filename">3.jpg</div>
+      </div>
+      <div class="gallery-hover-overlay"><span>🔧 Service Visit</span></div>
+    </div>
+
+    <!-- IMAGE 4 -->
+    <div class="gallery-item" onclick="openLightbox(3)">
+      <img src="4.jpg" alt="Gallery image 4" onerror="this.style.display='none'" onload="this.classList.add('loaded')"/>
+      <div class="gallery-placeholder">
+        <div class="ph-icon">🏢</div>
+        <div class="ph-num">4</div>
+        <div class="ph-label">Office Install</div>
+        <div class="ph-filename">4.jpg</div>
+      </div>
+      <div class="gallery-hover-overlay"><span>🏢 Office Install</span></div>
+    </div>
+
+    <!-- IMAGE 5 -->
+    <div class="gallery-item" onclick="openLightbox(4)">
+      <img src="5.jpg" alt="Gallery image 5" onerror="this.style.display='none'" onload="this.classList.add('loaded')"/>
+      <div class="gallery-placeholder">
+        <div class="ph-icon">✨</div>
+        <div class="ph-num">5</div>
+        <div class="ph-label">Happy Customer</div>
+        <div class="ph-filename">5.jpg</div>
+      </div>
+      <div class="gallery-hover-overlay"><span>✨ Happy Customer</span></div>
+    </div>
+
+    <!-- IMAGE 6 — Wide (span 2) -->
+    <div class="gallery-item" onclick="openLightbox(5)">
+      <img src="6.jpg" alt="Gallery image 6" onerror="this.style.display='none'" onload="this.classList.add('loaded')"/>
+      <div class="gallery-placeholder">
+        <div class="ph-icon">🛠️</div>
+        <div class="ph-num">6</div>
+        <div class="ph-label">Pipe Routing Work</div>
+        <div class="ph-filename">6.jpg</div>
+      </div>
+      <div class="gallery-hover-overlay"><span>🛠️ Pipe Routing</span></div>
+    </div>
+
+    <!-- IMAGE 7 -->
+    <div class="gallery-item" onclick="openLightbox(6)">
+      <img src="7.jpg" alt="Gallery image 7" onerror="this.style.display='none'" onload="this.classList.add('loaded')"/>
+      <div class="gallery-placeholder">
+        <div class="ph-icon">🌡️</div>
+        <div class="ph-num">7</div>
+        <div class="ph-label">Gas Refilling</div>
+        <div class="ph-filename">7.jpg</div>
+      </div>
+      <div class="gallery-hover-overlay"><span>🌡️ Gas Refilling</span></div>
+    </div>
+
+    <!-- IMAGE 8 -->
+    <div class="gallery-item" onclick="openLightbox(7)">
+      <img src="8.jpg" alt="Gallery image 8" onerror="this.style.display='none'" onload="this.classList.add('loaded')"/>
+      <div class="gallery-placeholder">
+        <div class="ph-icon">🧹</div>
+        <div class="ph-num">8</div>
+        <div class="ph-label">Deep Cleaning</div>
+        <div class="ph-filename">8.jpg</div>
+      </div>
+      <div class="gallery-hover-overlay"><span>🧹 Deep Cleaning</span></div>
+    </div>
+
+    <!-- IMAGE 9 -->
+    <div class="gallery-item" onclick="openLightbox(8)">
+      <img src="9.jpg" alt="Gallery image 9" onerror="this.style.display='none'" onload="this.classList.add('loaded')"/>
+      <div class="gallery-placeholder">
+        <div class="ph-icon">⭐</div>
+        <div class="ph-num">9</div>
+        <div class="ph-label">5-Star Job</div>
+        <div class="ph-filename">9.jpg</div>
+      </div>
+      <div class="gallery-hover-overlay"><span>⭐ 5-Star Job</span></div>
+    </div>
+
+    <!-- IMAGE 10 -->
+    <div class="gallery-item" onclick="openLightbox(9)">
+      <img src="10.jpg" alt="Gallery image 10" onerror="this.style.display='none'" onload="this.classList.add('loaded')"/>
+      <div class="gallery-placeholder">
+        <div class="ph-icon">🎉</div>
+        <div class="ph-num">10</div>
+        <div class="ph-label">Before &amp; After</div>
+        <div class="ph-filename">10.jpg</div>
+      </div>
+      <div class="gallery-hover-overlay"><span>🎉 Before &amp; After</span></div>
+    </div>
+
+  </div><!-- /gallery-grid -->
+</section>
+
+<!-- LIGHTBOX -->
+<div class="lightbox" id="lightbox" onclick="closeLightboxOutside(event)">
+  <button class="lightbox-close" onclick="closeLightbox()">✕</button>
+  <button class="lightbox-nav prev" onclick="shiftLightbox(-1)">‹</button>
+  <img class="lightbox-img" id="lightboxImg" src="" alt="Gallery"/>
+  <button class="lightbox-nav next" onclick="shiftLightbox(1)">›</button>
+  <div class="lightbox-caption" id="lightboxCaption"></div>
+</div>
+
+<!-- CONTACT -->
+<section id="contact">
+  <div class="section-tag">Get In Touch</div>
+  <h2 class="section-title">Book a Service</h2>
+  <div class="contact-wrap">
+    <div class="contact-info">
+      <p style="color:var(--gray);line-height:1.7;margin-bottom:1rem;">Whether you need a quick repair, a new AC installation, or an AMC plan — reach out and we'll get back to you immediately.</p>
+      <div class="info-item">
+        <div class="info-icon">📍</div>
+        <div class="info-text">
+          <h4>Our Location</h4>
+          <p>275, Phadnish Complex Near Kothari Market</p>
+          <p>M.G Road, Indore (M.P), Pin: 452001 </p>
+          <p>India</p>
+           <a href="https://maps.google.com/?q=Pune,Maharashtra,India"
+     target="_blank" rel="noopener noreferrer" class="maps-link">
+    📌 Open in Google Maps →
+  </a>
+        </div>
+      </div>
+      <div class="info-item">
+        <div class="info-icon">📞</div>
+        <div class="info-text">
+          <h4>Call / WhatsApp</h4>
+          <p>+91 9826330228</p>
+          <p>0731-4082761</p>
+        </div>
+      </div>
+      <div class="info-item">
+        <div class="info-icon">✉️</div>
+        <div class="info-text">
+          <h4>Email</h4>
+          <p><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="f193948285df929e9e9dc0c0b1969c90989ddf929e9c">best.cool11@gmail.com</a></p>
+        </div>
+      </div>
+      <div class="info-item">
+        <div class="info-icon">🕐</div>
+        <div class="info-text">
+          <h4>Working Hours</h4>
+          <p>Mon–Sat: 9 AM – 8 PM<br>Sunday: 10 AM – 5 PM</p>
+        </div>
+      </div>
+    </div>
+    <form class="contact-form" onsubmit="handleSubmit(event)">
+      <div class="form-row">
+        <div class="form-group">
+          <label>Your Name</label>
+          <input id="form-name" type="text" placeholder="Rahul Sharma" required />
+        </div>
+        <div class="form-group">
+          <label>Phone Number</label>
+          <input id="form-phone" type="tel" placeholder="+91 9876543210" required />
+        </div>
+      </div>
+      <div class="form-group">
+        <label>Service Required</label>
+        <select id="form-service">
+          <option>AC Repair</option>
+          <option>AC Installation</option>
+          <option>AC Service / Cleaning</option>
+          <option>AC Purchase</option>
+          <option>AMC Plan</option>
+          <option>Other</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>Message</label>
+        <textarea id="form-message" placeholder="Describe your issue or requirement..."></textarea>
+      </div>
+      <button type="submit" class="btn-submit">
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="currentColor" style="vertical-align:middle;margin-right:6px"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+        Send via WhatsApp
+      </button>
+    </form>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-top">
+    <div>
+      <div class="footer-brand-name">BestCool</div>
+      <p class="footer-brand-desc">Indore's most trusted AC sales and service center. Keeping homes and offices cool since 2014.</p>
+    </div>
+    <div class="footer-col">
+      <h5>Services</h5>
+      <ul>
+        <li><a href="#services">AC Repair</a></li>
+        <li><a href="#services">Installation</a></li>
+        <li><a href="#services">Cleaning</a></li>
+        <li><a href="#services">AMC Plans</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h5>Products</h5>
+      <ul>
+        <li><a href="#products">Split AC</a></li>
+        <li><a href="#products">Window AC</a></li>
+        <li><a href="#products">Cassette AC</a></li>
+        <li><a href="#products">AC Exchange</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h5>Company</h5>
+      <ul>
+        <li><a href="#why">About Us</a></li>
+        <li><a href="#testimonials">Reviews</a></li>
+        <li><a href="#contact">Contact</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <div class="footer-copy">© 2025 <span>BestCool</span> AC Sales & Service. All rights reserved.</div>
+    <div class="social-links">
+      <a href="#" title="WhatsApp">💬</a>
+      <a href="#" title="Instagram">📸</a>
+      <a href="#" title="Facebook">👥</a>
+    </div>
+  </div>
+</footer>
+
+<!-- FLOATING WHATSAPP BUTTON -->
+<a href="https://wa.me/919826330228?text=Hi%20BestCool!%20I%20need%20help%20with%20my%20AC." target="_blank" rel="noopener noreferrer" class="float-call">
+  <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+  WhatsApp Us
+</a>
+
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+function handleSubmit(e) {
+  e.preventDefault();
+
+  const name    = document.getElementById('form-name').value.trim();
+  const phone   = document.getElementById('form-phone').value.trim();
+  const service = document.getElementById('form-service').value;
+  const message = document.getElementById('form-message').value.trim();
+
+  // Build the WhatsApp message
+  const waText =
+    `🔔 *New Service Request – BestCool*\n\n` +
+    `👤 *Name:* ${name}\n` +
+    `📞 *Phone:* ${phone}\n` +
+    `🛠️ *Service:* ${service}\n` +
+    `💬 *Message:* ${message || 'No additional message'}`;
+
+  // ✏️ Replace 919826330228 with your WhatsApp number (country code + number, no + or spaces)
+  const waURL = `https://wa.me/919826330228?text=${encodeURIComponent(waText)}`;
+
+  // Show success state on button
+  const btn = e.target.querySelector('.btn-submit');
+  btn.innerHTML = '✅ Opening WhatsApp...';
+  btn.style.background = 'linear-gradient(135deg, #0a7a3a, #00c87a)';
+
+  // Open WhatsApp in new tab
+  window.open(waURL, '_blank');
+
+  // Reset button and form after 3s
+  setTimeout(() => {
+    btn.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="currentColor" style="vertical-align:middle;margin-right:6px"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg> Send via WhatsApp`;
+    btn.style.background = '';
+    e.target.reset();
+  }, 3000);
+}
+
+function toggleMenu(el) {
+  el.classList.toggle('open');
+  // simple mobile nav — could be extended
+}
+
+// Gallery lightbox
+const galleryImages = [
+  { src: '1.jpg',  label: '🏠 Customer Installation' },
+  { src: '2.jpg',  label: '❄️ AC Setup' },
+  { src: '3.jpg',  label: '🔧 Service Visit' },
+  { src: '4.jpg',  label: '🏢 Office Install' },
+  { src: '5.jpg',  label: '✨ Happy Customer' },
+  { src: '6.jpg',  label: '🛠️ Pipe Routing Work' },
+  { src: '7.jpg',  label: '🌡️ Gas Refilling' },
+  { src: '8.jpg',  label: '🧹 Deep Cleaning' },
+  { src: '9.jpg',  label: '⭐ 5-Star Job' },
+  { src: '10.jpg', label: '🎉 Before & After' },
+];
+let currentLightboxIndex = 0;
+
+function openLightbox(index) {
+  currentLightboxIndex = index;
+  updateLightbox();
+  document.getElementById('lightbox').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+function closeLightbox() {
+  document.getElementById('lightbox').classList.remove('open');
+  document.body.style.overflow = '';
+}
+function closeLightboxOutside(e) {
+  if (e.target === document.getElementById('lightbox')) closeLightbox();
+}
+function shiftLightbox(dir) {
+  currentLightboxIndex = (currentLightboxIndex + dir + galleryImages.length) % galleryImages.length;
+  updateLightbox();
+}
+function updateLightbox() {
+  const item = galleryImages[currentLightboxIndex];
+  document.getElementById('lightboxImg').src = item.src;
+  document.getElementById('lightboxCaption').textContent = item.label + '  ·  ' + (currentLightboxIndex + 1) + ' / ' + galleryImages.length;
+}
+// Keyboard navigation
+document.addEventListener('keydown', e => {
+  const lb = document.getElementById('lightbox');
+  if (!lb.classList.contains('open')) return;
+  if (e.key === 'ArrowRight') shiftLightbox(1);
+  if (e.key === 'ArrowLeft')  shiftLightbox(-1);
+  if (e.key === 'Escape')     closeLightbox();
+});
+const observer = new IntersectionObserver((entries) => {
